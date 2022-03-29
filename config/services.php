@@ -57,4 +57,9 @@ return [
         'redirect' => env('GITHUB_REDIRECT_URL'),
     ],
 
+    'recaptcha' => [
+        'key' => env('RECAPTCHA_SITE_KEY'),
+        'secret' => env('RECAPTCHA_SECRET')
+    ]
+
 ];

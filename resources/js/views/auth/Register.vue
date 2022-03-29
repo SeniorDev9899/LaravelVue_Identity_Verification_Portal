@@ -178,6 +178,16 @@
         </div>
       </div>
     </div>
+    <vue-recaptcha
+      sitekey="6LeCGCgfAAAAALRBFwy5jvvNPP1uEalYD5RkNa6N"
+      :loadRecaptchaScript="true"
+      ref="recaptcha"
+      type="visible"
+      @verify="onCaptchaVerified"
+      @expired="onCaptchaExpired"
+      class="register-recaptcha"
+    >
+    </vue-recaptcha>
     <button class="btn btn-login btn-full">Register</button>
     <div class="ivp-to-login">
       <span>Already have an account?</span>
@@ -185,11 +195,13 @@
     </div>
   </form>
 </template>
-<script type="text/babel">
+<script>
+import { VueRecaptcha } from "vue-recaptcha";
 import Auth from "../../services/auth";
 import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
 
 export default {
+  name: "register",
   data() {
     return {
       registerData: {
@@ -199,8 +211,14 @@ export default {
         password: "",
         password_confirmation: "",
         gender: "male",
+        recaptcha: "",
       },
+      loadingPage: true,
+      validateCaptcha: false,
     };
+  },
+  mounted() {
+    this.loadingPage = false;
   },
   validations: {
     registerData: {
@@ -238,16 +256,28 @@ export default {
       },
     },
   },
+  components: { VueRecaptcha },
   methods: {
     validateBeforeSubmit() {
+      this.loadingPage = true;
       this.$v.$touch();
       if (!this.$v.$error) {
+        console.log("RegisterData => ", this.registerData);
         Auth.register(this.registerData).then((res) => {
           if (res) {
+            this.loadingPage = false;
             this.$router.push("/admin/dashboard/basic");
           }
         });
       }
+    },
+    onCaptchaVerified(recaptchaToken) {
+      this.registerData.recaptcha = recaptchaToken;
+      console.log("recaptcha token => ", this.registerData.recaptcha);
+      this.validateCaptcha = true;
+    },
+    onCaptchaExpired() {
+      this.$refs.recaptcha.reset();
     },
   },
 };
@@ -284,5 +314,11 @@ export default {
 }
 .margin-top-0 {
   margin-top: 0px;
+}
+.register-recaptcha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>

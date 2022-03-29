@@ -39,6 +39,16 @@
         {{ $v.loginData.password.$params.minLength.min }} letters.
       </span>
     </div>
+    <vue-recaptcha
+      sitekey="6LeCGCgfAAAAALRBFwy5jvvNPP1uEalYD5RkNa6N"
+      :loadRecaptchaScript="true"
+      ref="recaptcha"
+      type="visible"
+      @verify="onCaptchaVerified"
+      @expired="onCaptchaExpired"
+      class="login-recaptcha"
+    >
+    </vue-recaptcha>
     <div class="other-actions row">
       <div class="col-sm-6">
         <div class="checkbox">
@@ -65,7 +75,8 @@
   </form>
 </template>
 
-<script type="text/babel">
+<script>
+import { VueRecaptcha } from "vue-recaptcha";
 import { required, minLength, email } from "vuelidate/lib/validators";
 import Auth from "../../services/auth";
 import Ls from "./../../services/ls.js";
@@ -76,9 +87,15 @@ export default {
       loginData: {
         email: "admin@laraspace.in",
         password: "admin@123",
-        remember: "",
+        remember: true,
+        recaptcha: "",
       },
+      loadingPage: true,
+      validateCaptcha: false,
     };
+  },
+  mounted() {
+    this.loadingPage = false;
   },
   validations: {
     loginData: {
@@ -92,6 +109,7 @@ export default {
       },
     },
   },
+  components: { VueRecaptcha },
   methods: {
     validateBeforeSubmit() {
       this.$v.$touch();
@@ -107,6 +125,14 @@ export default {
           }
         });
       }
+    },
+    onCaptchaVerified(recaptchaToken) {
+      this.registerData.recaptcha = recaptchaToken;
+      console.log("recaptcha token => ", this.registerData.recaptcha);
+      this.validateCaptcha = true;
+    },
+    onCaptchaExpired() {
+      this.$refs.recaptcha.reset();
     },
   },
   created() {
@@ -171,5 +197,11 @@ export default {
   -webkit-box-shadow: inset 0 1px 0 rgb(255 255 255 / 15%),
     0 1px 1px rgb(0 0 0 / 8%);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 15%), 0 1px 1px rgb(0 0 0 / 8%);
+}
+.login-recaptcha {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
 }
 </style>

@@ -38,6 +38,7 @@
                       <input
                         id="user-avatar"
                         type="file"
+                        accept="image/png, image/gif, image/jpeg"
                         class="form-control"
                         v-on:change="onChange"
                         style="display: none"

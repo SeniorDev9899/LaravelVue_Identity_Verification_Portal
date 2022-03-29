@@ -26,6 +26,7 @@ export default {
   async register(registerData) {
     try {
       let response = await axios.post('/api/auth/register', registerData)
+      console.log("Response => ", response);
       toastr['success']('A new user has been registered!', 'Success')
       Ls.set('First Name', response.data.first_name)
       Ls.set('Last Name', response.data.last_name)

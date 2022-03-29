@@ -3,6 +3,7 @@ import VeeValidate from 'vee-validate'
 import Vuelidate from 'vuelidate'
 import VuePrism from 'vue-prism'
 import VTooltip from 'v-tooltip'
+import VueRecaptcha from "vue-recaptcha"
 import BootstrapVue from 'bootstrap-vue'
 
 import Ls from './services/ls'
@@ -21,6 +22,9 @@ import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+import Vue from 'vue'
+
+Vue.config.productionTip = false;
 
 /**
  * Global plugins
@@ -93,6 +97,7 @@ Vue.component('v-dropdown-item', VDropdownItem)
 Vue.component('v-dropdown-divider', VDropdownDivider)
 Vue.component('v-collapse', VCollapse)
 Vue.component('v-collapse-item', VCollapseItem)
+Vue.component('vue-recaptcha', VueRecaptcha);
 
 Vue.use(VueRouter)
 Vue.use(VuePrism)
