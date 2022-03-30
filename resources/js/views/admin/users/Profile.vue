@@ -750,7 +750,10 @@ export default {
     },
     setUserAvatar(path) {
       this.user_picture = path;
-      if (this.current_user_role == "practitioner") {
+      if (
+        this.current_user_role == "practitioner" ||
+        this.user_id == Ls.get("user_id")
+      ) {
         this.$emit("userAvatarChange", this.user_picture);
       }
     },

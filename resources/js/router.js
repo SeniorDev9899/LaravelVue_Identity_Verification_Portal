@@ -258,68 +258,68 @@ const routes = [
       },
 
       // Charts
-      {
-        path: 'charts/chartjs',
-        component: Chartjs
-      },
-      {
-        path: 'charts/gauges',
-        component: Gauges
-      },
+      // {
+      //   path: 'charts/chartjs',
+      //   component: Chartjs
+      // },
+      // {
+      //   path: 'charts/gauges',
+      //   component: Gauges
+      // },
 
       //  Icons
-      {
-        path: 'icons/fontawesome',
-        component: Fontawesome
-      },
-      {
-        path: 'icons/fpsline',
-        component: Fpsline
-      },
-      {
-        path: 'icons/icomoon',
-        component: IcoMoon
-      },
-      {
-        path: 'icons/line',
-        component: Line
-      },
-      {
-        path: 'icons/meteo',
-        component: Meteo
-      },
+      // {
+      //   path: 'icons/fontawesome',
+      //   component: Fontawesome
+      // },
+      // {
+      //   path: 'icons/fpsline',
+      //   component: Fpsline
+      // },
+      // {
+      //   path: 'icons/icomoon',
+      //   component: IcoMoon
+      // },
+      // {
+      //   path: 'icons/line',
+      //   component: Line
+      // },
+      // {
+      //   path: 'icons/meteo',
+      //   component: Meteo
+      // },
 
       // Forms
-      {
-        path: 'forms/general',
-        component: General
-      },
-      {
-        path: 'forms/advanced',
-        component: Advanced
-      },
-      {
-        path: 'forms/layouts',
-        component: Layouts
-      },
-      {
-        path: 'forms/vuelidate',
-        component: Vuelidate
-      },
-      {
-        path: 'forms/vee-validate',
-        component: VeeValidate
-      },
+      // {
+      //   path: 'forms/general',
+      //   component: General
+      // },
+      // {
+      //   path: 'forms/advanced',
+      //   component: Advanced
+      // },
+      // {
+      //   path: 'forms/layouts',
+      //   component: Layouts
+      // },
+      // {
+      //   path: 'forms/vuelidate',
+      //   component: Vuelidate
+      // },
+      // {
+      //   path: 'forms/vee-validate',
+      //   component: VeeValidate
+      // },
 
       // Gallery
-      {
-        path: 'gallery/image',
-        component: ImageGallery
-      },
-      {
-        path: 'gallery/video',
-        component: VideoGallery
-      },
+      // {
+      //   path: 'gallery/image',
+      //   component: ImageGallery
+      // },
+      // {
+      //   path: 'gallery/video',
+      //   component: VideoGallery
+      // },
 
       // Users
       {
@@ -332,14 +332,14 @@ const routes = [
       },
 
       // Apps
-      {
-        path: 'apps/mailbox',
-        component: MailboxApp
-      },
-      {
-        path: 'apps/todos',
-        component: TodosApp
-      },
+      // {
+      //   path: 'apps/mailbox',
+      //   component: MailboxApp
+      // },
+      // {
+      //   path: 'apps/todos',
+      //   component: TodosApp
+      // },
 
       // Settings
       {

@@ -320,12 +320,12 @@
           <div class="card-body">
             <table-component
               :data="getUsers"
-              sort-by="row.id"
+              sort-by="full_name"
               sort-order="desc"
               table-class="table"
               ref="table"
             >
-              <table-column label="Full Name">
+              <table-column show="full_name" label="Full Name">
                 <template slot-scope="row">
                   <div class="user-profile-name">
                     <span>{{ row.first_name }}</span>
@@ -333,7 +333,11 @@
                   </div>
                 </template>
               </table-column>
-              <table-column label="User Avatar">
+              <table-column
+                :sortable="false"
+                :filterable="false"
+                label="User Avatar"
+              >
                 <template slot-scope="row">
                   <div class="user-profile-avatar">
                     <img :src="row.user_avatar" />
@@ -373,39 +377,21 @@
                 </template>
               </table-column>
             </table-component>
-            <!-- <table-component
-              :data="[
-                { firstName: 'John', birthday: '04/10/1940', songs: 72 },
-                { firstName: 'Paul', birthday: '18/06/1942', songs: 70 },
-                { firstName: 'George', birthday: '25/02/1943', songs: 22 },
-                { firstName: 'Ringo', birthday: '07/07/1940', songs: 2 },
-              ]"
-              sort-by="songs"
-              sort-order="asc"
-            >
-              <table-column show="firstName" label="First name"></table-column>
-              <table-column
-                show="songs"
-                label="Songs"
-                data-type="numeric"
-              ></table-column>
-              <table-column
-                show="birthday"
-                label="Birthday"
-                :filterable="false"
-                data-type="date:DD/MM/YYYY"
-              ></table-column>
-            </table-component> -->
           </div>
         </div>
       </div>
     </div>
+
+    <sweet-modal ref="success_modal" icon="success">
+      A new {{ addMemberData.role }} has been added successfully!
+    </sweet-modal>
   </div>
 </template>
 
 <script>
 import { TableComponent, TableColumn } from "vue-table-component";
 import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
+import { SweetModal, SweetModalTab } from "sweet-modal-vue";
 import Ls from "./../../../services/ls.js";
 import Auth from "./../../../services/auth.js";
 export default {
@@ -413,6 +399,8 @@ export default {
   components: {
     TableComponent,
     TableColumn,
+    SweetModal,
+    SweetModalTab,
   },
   data() {
     return {
@@ -448,6 +436,10 @@ export default {
         "health_status",
       ],
     };
+  },
+  install(Vue, options) {
+    Vue.component("SweetModal", SweetModal);
+    Vue.component("SweetModalTab", SweetModalTab);
   },
   async created() {
     this.user_id = Ls.get("user_id");
@@ -533,6 +525,21 @@ export default {
         } else {
           return_data = pagination_data;
         }
+        if (sort) {
+          if (sort.order == "desc") {
+            if (sort.fieldName == "full_name") {
+              return_data.sort(exist.dynamicSortDesc("first_name"));
+            } else {
+              return_data.sort(exist.dynamicSortDesc(sort.fieldName));
+            }
+          } else if (sort.order == "asc") {
+            if (sort.fieldName == "full_name") {
+              return_data.sort(exist.dynamicSortAsc("first_name"));
+            } else {
+              return_data.sort(exist.dynamicSortAsc(sort.fieldName));
+            }
+          }
+        }
         return {
           data: return_data,
           pagination: {
@@ -598,6 +605,7 @@ export default {
         this.$forceUpdate();
         Auth.addNewMemberregister(this.addMemberData).then((res) => {
           if (res) {
+            this.$refs.success_modal.open();
             this.show = false;
             this.$refs.table.refresh();
           }
@@ -606,6 +614,36 @@ export default {
     },
     removeDuplicates(arr) {
       return arr.filter((item, index) => arr.indexOf(item) === index);
+    },
+    dynamicSortDesc(property) {
+      var sortOrder = 1;
+      if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+      }
+      return function (a, b) {
+        /* next line works with strings and numbers,
+         * and you may want to customize it to your needs
+         */
+        var result =
+          a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+        return result * sortOrder;
+      };
+    },
+    dynamicSortAsc(property) {
+      var sortOrder = 1;
+      if (property[0] === "-") {
+        sortOrder = -1;
+        property = property.substr(1);
+      }
+      return function (a, b) {
+        /* next line works with strings and numbers,
+         * and you may want to customize it to your needs
+         */
+        var result =
+          a[property] < b[property] ? 1 : a[property] > b[property] ? -1 : 0;
+        return result * sortOrder;
+      };
     },
   },
 };
