@@ -26,14 +26,23 @@ export default {
   async register(registerData) {
     try {
       let response = await axios.post('/api/auth/register', registerData)
-      console.log("Response => ", response);
-      toastr['success']('A new user has been registered!', 'Success')
+      toastr['success']('A new ' + response.data.role + ' has been registered!', 'Success')
       Ls.set('First Name', response.data.first_name)
       Ls.set('Last Name', response.data.last_name)
       Ls.set('Email', response.data.email)
       Ls.set('Role', response.data.role)
       Ls.set('Gender', response.data.gender)
       Ls.set('Registered_User', true)
+      return response.data
+    } catch (error) {
+      toastr['error']('Error Occurred in registered!', 'Error')
+    }
+  },
+
+  async addNewMemberregister(registerData) {
+    try {
+      let response = await axios.post('/api/auth/new/register', registerData)
+      toastr['success']('A new ' + response.data.role + ' has been registered!', 'Success')
       return response.data
     } catch (error) {
       toastr['error']('Error Occurred in registered!', 'Error')

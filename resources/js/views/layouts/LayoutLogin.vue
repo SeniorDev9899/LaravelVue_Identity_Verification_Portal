@@ -36,6 +36,9 @@
   /* background-color: #51a351; */
   background-color: #51a351 !important;
 }
+.toast-info {
+  background-color: #2f96b4;
+}
 .toast-error {
   background-color: #bd362f !important;
 }

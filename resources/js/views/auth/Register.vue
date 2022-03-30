@@ -303,7 +303,6 @@ export default {
       this.loadingPage = true;
       this.$v.$touch();
       if (!this.$v.$error) {
-        console.log("RegisterData => ", this.registerData);
         Auth.register(this.registerData).then((res) => {
           if (res) {
             this.loadingPage = false;
@@ -314,7 +313,6 @@ export default {
     },
     onCaptchaVerified(recaptchaToken) {
       this.registerData.recaptcha = recaptchaToken;
-      console.log("recaptcha token => ", this.registerData.recaptcha);
       this.validateCaptcha = true;
     },
     onCaptchaExpired() {

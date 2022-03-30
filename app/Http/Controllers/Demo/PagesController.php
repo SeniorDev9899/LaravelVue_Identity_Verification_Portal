@@ -2,7 +2,7 @@
 namespace App\Http\Controllers\Demo;
 
 use App\User;
-use App\Avatars;
+use App\Avatars;    
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
@@ -21,7 +21,7 @@ class PagesController extends Controller
     public function allUsers()
     {
     //    return $users = User::whereRole('practitioner')->paginate(10);
-       return $users = User::orderBy('id','desc')->paginate(200);
+       return $users = User::orderBy('id','desc')->paginate(5);
     }
     
     public function getUserWithId($id) 
@@ -87,5 +87,10 @@ class PagesController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return $users = User::all();
+    }
+
+    public function allDestroy()
+    {
+        return User::truncate();
     }
 }

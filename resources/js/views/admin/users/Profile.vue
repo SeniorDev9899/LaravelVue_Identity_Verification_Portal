@@ -2,7 +2,7 @@
   <div
     class="page-profile"
     :class="
-      user_role == 'practitioner' || toggle == true
+      current_user_role == 'practitioner' || toggle == true
         ? 'role_practitioner'
         : 'main-content'
     "
@@ -171,7 +171,7 @@
                           label="Role"
                           label-for="role-input"
                           :class="
-                            user_role == 'practitioner'
+                            current_user_role == 'practitioner'
                               ? 'visibility_hidden'
                               : 'visibility_show'
                           "
@@ -671,6 +671,7 @@ export default {
       user_current_password: "......",
       user_new_password: "......",
       user_confirm_password: "......",
+      current_user_role: "",
     };
   },
   components: {
@@ -679,16 +680,15 @@ export default {
   },
   async created() {
     this.user_id = this.$route.params.id;
-    console.log("user ID => ", this.user_id);
-    this.user_role = Ls.get("Role");
+    this.current_user_role = Ls.get("Role");
     this.user_picture = "/assets/img/default-user-avatar.jpg";
     try {
       const response = await axios.get(`/api/admin/user/get/${this.user_id}`);
-      console.log("Response => ", response);
       this.user_first_name = response.data.user_info[0].first_name;
       this.user_last_name = response.data.user_info[0].last_name;
       this.user_email = response.data.user_info[0].email;
       this.user_gender = response.data.user_info[0].gender;
+      this.user_role = response.data.user_info[0].role;
       this.user_id_number = response.data.user_info[0].id_number;
       this.user_serial_number = response.data.user_info[0].serial_number;
       this.user_company = response.data.user_info[0].company;
@@ -709,7 +709,6 @@ export default {
   methods: {
     onChange(e) {
       this.img = e.target.files[0];
-      console.log("Image File => ", e.target.files);
       if (this.img !== "") {
         this.changeUserAvatar(e);
       }
@@ -727,12 +726,10 @@ export default {
       formData.append("user_id", this.user_id);
       if (formData.getAll("user_img")[0] !== "") {
         for (const value of formData.values()) {
-          console.log("Item of File => ", value);
         }
         axios
           .post("/api/admin/user/changeUserAvatar", formData, config)
           .then(function (res) {
-            console.log("Response => ", res);
             if (Array.isArray(res.data) && res.data.length !== 0) {
               Ls.set("user_avatar", res.data[0].path);
               exist.setUserAvatar(res.data[0].path);
@@ -753,7 +750,9 @@ export default {
     },
     setUserAvatar(path) {
       this.user_picture = path;
-      this.$emit("userAvatarChange", this.user_picture);
+      if (this.current_user_role == "practitioner") {
+        this.$emit("userAvatarChange", this.user_picture);
+      }
     },
     validateState(ref) {
       if (
@@ -803,7 +802,6 @@ export default {
         axios
           .post(`/api/admin/user/edit/${this.user_id}`, formData)
           .then(function (res) {
-            console.log("Response => ", res.data);
             Ls.set("First Name", res.data[0].first_name);
             Ls.set("Last Name", res.data[0].last_name);
             Ls.set("Email", res.data[0].email);
@@ -817,9 +815,6 @@ export default {
       });
     },
     changePassword() {
-      console.log("Current password => ", this.user_current_password);
-      console.log("New password => ", this.user_new_password);
-      console.log("Confirm password => ", this.user_confirm_password);
       this.$validator.validateAll().then((result) => {
         if (!result) {
           return;
@@ -833,7 +828,6 @@ export default {
         axios
           .post(`/api/admin/user/updatePassword/${this.user_id}`, formData)
           .then(function (res) {
-            console.log("Result of Change Password => ", res);
             if (res.data == 1) {
               window.toastr["success"](
                 "Your password has been changed successfully!",

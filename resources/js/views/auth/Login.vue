@@ -134,8 +134,7 @@ export default {
       }
     },
     onCaptchaVerified(recaptchaToken) {
-      this.registerData.recaptcha = recaptchaToken;
-      console.log("recaptcha token => ", this.registerData.recaptcha);
+      this.loginData.recaptcha = recaptchaToken;
       this.validateCaptcha = true;
     },
     onCaptchaExpired() {

@@ -19,6 +19,11 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('register','AuthController@store');
     Route::get('logout','AuthController@logout');
     Route::get('check','AuthController@check');
+    Route::group(['prefix' => 'new'], function () {
+        Route::post('/register', [
+            'as' => 'auth.new.register', 'uses' => 'AuthController@newMemberAdd'
+        ]);
+    });
 });
 
 // session route
@@ -50,6 +55,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
 
         Route::delete('/{id}',[
             'as' => 'admin.users.delete', 'uses' => 'Demo\PagesController@destroy'
+        ]);
+
+        Route::delete('/all', [
+            'as' => 'admin.users.all.delete', 'uses' => 'Demo\PagesController@allDestroy'
         ]);
 
     });

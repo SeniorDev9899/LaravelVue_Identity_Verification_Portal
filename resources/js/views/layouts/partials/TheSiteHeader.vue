@@ -131,7 +131,6 @@ export default {
       const response = await axios.get(
         `/api/admin/user/avatar/get/${this.user_id}`
       );
-      console.log("Resopnse Data => ", response);
       if (response.data.length !== 0) {
         Ls.set("user_avatar", response.data);
         this.user_picture = Ls.get("user_avatar");

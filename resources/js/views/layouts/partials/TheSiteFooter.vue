@@ -2,9 +2,7 @@
   <footer class="site-footer">
     <div class="text-right">
       Powered by
-      <a href="http://bytefury.com/" target="_blank">
-        Bytefury
-      </a>
+      <a href="#" target="_blank"> Identity Verification Portal </a>
     </div>
   </footer>
 </template>
