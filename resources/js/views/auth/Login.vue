@@ -1,7 +1,9 @@
 <template>
   <form @submit.prevent="validateBeforeSubmit">
     <div :class="['form-group', { 'is-invalid': $v.loginData.email.$error }]">
-      <label for="login-email">Email: </label>
+      <label class="login-label" for="login-email"
+        ><i class="fa fa-envelope" aria-hidden="true"></i>
+      </label>
       <input
         :class="{ 'is-invalid': $v.loginData.email.$error }"
         v-model.trim="loginData.email"
@@ -21,7 +23,9 @@
     <div
       :class="['form-group', { 'is-invalid': $v.loginData.password.$error }]"
     >
-      <label for="login-password">Password: </label>
+      <label class="login-label" for="login-password"
+        ><i class="fa fa-key" aria-hidden="true"></i>
+      </label>
       <input
         :class="{ 'is-invalid': $v.loginData.password.$error }"
         v-model.trim="loginData.password"
@@ -178,7 +182,7 @@ export default {
 }
 .invalid-feedback {
   position: absolute;
-  top: 50px;
+  top: 45px;
   text-align: center;
 }
 .login-page .login-box .other-actions {
@@ -203,5 +207,24 @@ export default {
   align-items: center;
   justify-content: center;
   margin-top: 40px;
+}
+.login-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(1.5em + 0.75rem + 2px);
+  background-color: white;
+  border-radius: 5px 0px 0px 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  position: relative;
+  left: 5px;
+  width: 60px !important;
+  border-right: 1px black solid;
+  margin: 0px !important;
+}
+.login-label i {
+  font-size: 24px;
+  color: #585459;
 }
 </style>

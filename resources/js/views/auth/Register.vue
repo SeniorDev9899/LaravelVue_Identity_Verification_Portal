@@ -1,67 +1,72 @@
 <template>
   <form @submit.prevent="validateBeforeSubmit">
-    <div
-      :class="[
-        'form-group',
-        { 'is-invalid': $v.registerData.first_name.$error },
-      ]"
-    >
-      <label for="signup-fist-name">First Name</label>
-      <input
-        :class="{
-          'is-invalid': $v.registerData.first_name.$error,
-          'form-group--loading': $v.registerData.first_name.$pending,
-        }"
-        v-model.lazy="registerData.first_name"
-        class="form-control"
-        placeholder="Enter First Name"
-        type="text"
-        id="signup-fist-name"
-        @change="$v.registerData.first_name.$touch()"
-      />
-      <span
-        v-if="!$v.registerData.first_name.required"
-        class="invalid-feedback"
+    <div class="user-registration-first-last-name">
+      <div
+        :class="[
+          'form-group name-form',
+          { 'is-invalid': $v.registerData.first_name.$error },
+        ]"
       >
-        First Name is required.
-      </span>
-      <span
-        v-if="!$v.registerData.first_name.minLength"
-        class="invalid-feedback"
+        <label for="signup-fist-name">First Name</label>
+        <input
+          :class="{
+            'is-invalid': $v.registerData.first_name.$error,
+            'form-group--loading': $v.registerData.first_name.$pending,
+          }"
+          v-model.lazy="registerData.first_name"
+          class="form-control"
+          placeholder="Enter First Name"
+          type="text"
+          id="signup-fist-name"
+          @change="$v.registerData.first_name.$touch()"
+        />
+        <span
+          v-if="!$v.registerData.first_name.required"
+          class="invalid-feedback"
+        >
+          First Name is required.
+        </span>
+        <span
+          v-if="!$v.registerData.first_name.minLength"
+          class="invalid-feedback"
+        >
+          First Name must have at least
+          {{ $v.registerData.first_name.$params.minLength.min }} letters.
+        </span>
+      </div>
+      <div
+        :class="[
+          'form-group name-form',
+          { 'is-invalid': $v.registerData.last_name.$error },
+        ]"
       >
-        First Name must have at least
-        {{ $v.registerData.first_name.$params.minLength.min }} letters.
-      </span>
-    </div>
-    <div
-      :class="[
-        'form-group',
-        { 'is-invalid': $v.registerData.last_name.$error },
-      ]"
-    >
-      <label for="signup-last-name">Last Name</label>
-      <input
-        :class="{
-          'is-invalid': $v.registerData.last_name.$error,
-          'form-group--loading': $v.registerData.last_name.$pending,
-        }"
-        v-model.lazy="registerData.last_name"
-        class="form-control"
-        placeholder="Enter Last Name"
-        type="text"
-        id="signup-last-name"
-        @change="$v.registerData.last_name.$touch()"
-      />
-      <span v-if="!$v.registerData.last_name.required" class="invalid-feedback">
-        Last Name is required.
-      </span>
-      <span
-        v-if="!$v.registerData.last_name.minLength"
-        class="invalid-feedback"
-      >
-        Last Name must have at least
-        {{ $v.registerData.last_name.$params.minLength.min }} letters.
-      </span>
+        <label for="signup-last-name">Last Name</label>
+        <input
+          :class="{
+            'is-invalid': $v.registerData.last_name.$error,
+            'form-group--loading': $v.registerData.last_name.$pending,
+          }"
+          v-model.lazy="registerData.last_name"
+          class="form-control"
+          placeholder="Enter Last Name"
+          type="text"
+          id="signup-last-name"
+          @change="$v.registerData.last_name.$touch()"
+        />
+        <span
+          v-if="!$v.registerData.last_name.required"
+          class="invalid-feedback"
+        >
+          Last Name is required.
+        </span>
+        <span
+          v-if="!$v.registerData.last_name.minLength"
+          class="invalid-feedback"
+        >
+          Last Name must have at least
+          {{ $v.registerData.last_name.$params.minLength.min }} letters.
+        </span>
+      </div>
     </div>
     <div
       :class="['form-group', { 'is-invalid': $v.registerData.email.$error }]"
@@ -188,6 +193,38 @@
       class="register-recaptcha"
     >
     </vue-recaptcha>
+    <div class="form-group">
+      <div
+        class="form-group margin-top-0"
+        :class="{ 'is-invalid': $v.registerData.terms.$error }"
+      >
+        <div
+          class="form-check form-check-inline"
+          :class="{
+            'is-invalid': $v.registerData.terms.$error,
+          }"
+        >
+          <input
+            class="form-check-input"
+            type="checkbox"
+            name="terms"
+            v-model="registerData.terms"
+            id="terms"
+          />
+        </div>
+        <label class="form-check-label" for="terms"
+          >I accept <a href="#">Terms & Conditions</a></label
+        >
+        <div
+          v-if="$v.registerData.terms.$error"
+          class="invalid-feedback terms_conditions"
+        >
+          <span v-if="!$v.registerData.terms.required"
+            >Please accept terms & conditions is required</span
+          >
+        </div>
+      </div>
+    </div>
     <button class="btn btn-login btn-full">Register</button>
     <div class="ivp-to-login">
       <span>Already have an account?</span>
@@ -212,6 +249,7 @@ export default {
         password_confirmation: "",
         gender: "male",
         recaptcha: "",
+        terms: false,
       },
       loadingPage: true,
       validateCaptcha: false,
@@ -252,6 +290,9 @@ export default {
         },
       },
       gender: {
+        required,
+      },
+      terms: {
         required,
       },
     },
@@ -310,7 +351,7 @@ export default {
   text-align: center;
 }
 .btn-login {
-  margin-top: 20px;
+  margin-top: 15px;
 }
 .margin-top-0 {
   margin-top: 0px;
@@ -320,5 +361,20 @@ export default {
   align-items: center;
   justify-content: center;
   margin-top: 10px;
+}
+.user-registration-first-last-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+.user-registration-first-last-name .form-group {
+  width: 48%;
+}
+.terms_conditions {
+  top: 20px !important;
+}
+.name-form {
+  margin: 0px;
 }
 </style>
