@@ -668,9 +668,9 @@ export default {
         { value: "normal", text: "Normal" },
         { value: "good", text: "Good" },
       ],
-      user_current_password: "...",
-      user_new_password: "...",
-      user_confirm_password: "...",
+      user_current_password: "......",
+      user_new_password: "......",
+      user_confirm_password: "......",
     };
   },
   components: {
@@ -678,7 +678,8 @@ export default {
     tab: Tab,
   },
   async created() {
-    this.user_id = Ls.get("user_id");
+    this.user_id = this.$route.params.id;
+    console.log("user ID => ", this.user_id);
     this.user_role = Ls.get("Role");
     this.user_picture = "/assets/img/default-user-avatar.jpg";
     try {

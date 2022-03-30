@@ -37,8 +37,21 @@
               sort-order="desc"
               table-class="table"
             >
-              <table-column show="first_name" label="First Name" />
-              <table-column show="last_name" label="Last Name" />
+              <table-column label="Full Name">
+                <template slot-scope="row">
+                  <div class="user-profile-name">
+                    <span>{{ row.first_name }}</span>
+                    <span>{{ row.last_name }}</span>
+                  </div>
+                </template>
+              </table-column>
+              <table-column label="User Avatar">
+                <template slot-scope="row">
+                  <div class="user-profile-avatar">
+                    <img :src="row.user_avatar" />
+                  </div>
+                </template>
+              </table-column>
               <table-column show="gender" label="Gender" />
               <table-column show="email" label="Email" />
               <table-column show="role" label="Role" />
@@ -52,17 +65,12 @@
                 label="Verification Result"
               />
               <table-column show="health_status" label="Health Status" />
-              <!-- <table-column
-                show="created_at"
-                label="Registered On"
-                data-type="date:YYYY-MM-DD h:i:s"
-              /> -->
               <table-column :sortable="false" :filterable="false" label="">
                 <template slot-scope="row">
                   <div class="table__actions">
-                    <router-link to="/admin/users/profile">
+                    <router-link :to="'/admin/users/profile/' + row.id">
                       <a class="btn btn-default btn-sm">
-                        <i class="icon-fa icon-fa-search" /> View
+                        <i class="icon-fa icon-fa-edit" /> Edit
                       </a>
                     </router-link>
                     <a
@@ -97,18 +105,36 @@ export default {
     return {
       users: [],
       user_role: "",
+      user_id: "",
     };
   },
-  created() {
+  async created() {
+    this.user_id = Ls.get("user_id");
     this.user_role = Ls.get("Role");
   },
   methods: {
     async getUsers({ page, filter, sort }) {
       try {
         const response = await axios.get(`/api/admin/users/get?page=${page}`);
-
+        const avatarResponse = await axios.get("/api/admin/user/avatar/getAll");
+        var pagination_data = [];
+        response.data.data.forEach((user_item, i) => {
+          if (
+            user_item.id != this.user_id &&
+            user_item.role != this.user_role
+          ) {
+            avatarResponse.data.forEach((avatar_item, j) => {
+              if (user_item.id == avatar_item.user_id) {
+                let data = user_item;
+                data["user_avatar"] = avatar_item.path;
+                pagination_data.unshift(data);
+              }
+            });
+          }
+        });
+        console.log("Response => ", pagination_data);
         return {
-          data: response.data.data,
+          data: pagination_data,
           pagination: {
             totalPages: response.data.last_page,
             currentPage: page,
@@ -154,5 +180,14 @@ export default {
 .role_practitioner {
   padding: 90px 30px 10px 30px;
   min-height: calc(100% - 39px);
+}
+.user-profile-avatar {
+  width: 40px;
+  height: 40px;
+  margin: 0px auto;
+}
+.user-profile-avatar img {
+  max-width: 100%;
+  border-radius: 10px;
 }
 </style>

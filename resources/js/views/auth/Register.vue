@@ -355,6 +355,14 @@ export default {
 }
 .margin-top-0 {
   margin-top: 0px;
+  display: flex;
+  align-items: center;
+}
+.margin-top-0 label {
+  margin: 0px !important;
+}
+.margin-top-0 div {
+  margin-right: 5px;
 }
 .register-recaptcha {
   display: flex;

@@ -76,6 +76,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
             Route::get('/get/{id}', [
                 'as' => 'admin.user.avatar', 'uses' => 'AvatarsController@getUserAvatarWithId'
             ]);
+            Route::get('/getAll', [
+                'as' => 'admin.user.avatar.getall', 'uses' => 'AvatarsController@getAllAvatars'
+            ]);
         });        
     });
 });

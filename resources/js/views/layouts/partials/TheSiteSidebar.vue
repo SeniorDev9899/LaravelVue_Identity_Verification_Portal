@@ -194,7 +194,9 @@
               <span class="icon-fa arrow icon-fa-fw" />
             </a>
 
-            <router-link to="/admin/users/profile"> Profile </router-link>
+            <router-link :to="'/admin/users/profile/' + user_id">
+              Profile
+            </router-link>
 
             <router-link
               v-if="user_role === 'admin' || user_role === 'regional_admin'"
@@ -232,10 +234,12 @@ export default {
   props: ["toggle"],
   data() {
     return {
+      user_id: "",
       user_role: "",
     };
   },
   created() {
+    this.user_id = Ls.get("user_id");
     this.user_role = Ls.get("Role");
   },
 };

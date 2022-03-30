@@ -33,6 +33,7 @@ export default {
       Ls.set('Email', response.data.email)
       Ls.set('Role', response.data.role)
       Ls.set('Gender', response.data.gender)
+      Ls.set('Registered_User', true)
       return response.data
     } catch (error) {
       toastr['error']('Error Occurred in registered!', 'Error')
@@ -51,6 +52,7 @@ export default {
       Ls.remove('Role')
       Ls.remove('Gender')
       Ls.remove('user_avatar')
+      Ls.remove('Registered_User')
       toastr['success']('Logged out!', 'Success')
     } catch (error) {
       console.log('Error', error.message)

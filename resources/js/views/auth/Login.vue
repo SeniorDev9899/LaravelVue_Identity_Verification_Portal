@@ -44,6 +44,7 @@
       </span>
     </div>
     <vue-recaptcha
+      v-if="recaptchaEnable"
       sitekey="6LeCGCgfAAAAALRBFwy5jvvNPP1uEalYD5RkNa6N"
       :loadRecaptchaScript="true"
       ref="recaptcha"
@@ -96,6 +97,7 @@ export default {
       },
       loadingPage: true,
       validateCaptcha: false,
+      recaptchaEnable: true,
     };
   },
   mounted() {
@@ -124,7 +126,8 @@ export default {
             if (Ls.get("Role") == "admin" || Ls.get("Role") == "sub_admin") {
               this.$router.push("/admin/users/all");
             } else if (Ls.get("Role") == "practitioner") {
-              this.$router.push("/admin/users/profile");
+              let user_id = Ls.get("user_id");
+              this.$router.push("/admin/users/profile/" + user_id);
             }
           }
         });
@@ -146,10 +149,17 @@ export default {
     }
     if (Ls.get("auth.token") !== null) {
       if (Ls.get("Role") == "practitioner") {
-        this.$router.push("/admin/users/profile");
+        let user_id = Ls.get("user_id");
+        this.$router.push("/admin/users/profile/" + user_id);
       } else {
         this.$router.push("/admin/users/all");
       }
+    }
+    let registeredStatus = Ls.get("Registered_User");
+    if (registeredStatus) {
+      this.recaptchaEnable = false;
+    } else {
+      this.recaptchaEnable = true;
     }
   },
 };

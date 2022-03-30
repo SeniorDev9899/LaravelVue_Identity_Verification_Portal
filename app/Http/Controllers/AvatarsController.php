@@ -32,4 +32,7 @@ class AvatarsController extends Controller
     public function getUserAvatarWithId($id) {
         return Avatars::where('user_id',$id)->pluck('path');
     }
+    public function getAllAvatars() {
+        return Avatars::orderBy('id','desc')->get();
+    }
 }

@@ -20,7 +20,8 @@ class PagesController extends Controller
 
     public function allUsers()
     {
-       return $users = User::whereRole('practitioner')->paginate(10);
+    //    return $users = User::whereRole('practitioner')->paginate(10);
+       return $users = User::orderBy('id','desc')->paginate(200);
     }
     
     public function getUserWithId($id) 
