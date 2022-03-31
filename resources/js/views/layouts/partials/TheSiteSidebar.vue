@@ -190,19 +190,23 @@
 
           <v-collapse-item active-url="/admin/users">
             <a slot="item-title" href="#">
-              <i class="icon-fa icon-fa-user" />Users
+              <i class="icon-fa icon-fa-user" />Practitioners
               <span class="icon-fa arrow icon-fa-fw" />
             </a>
-
-            <router-link :to="'/admin/users/profile/' + user_id">
-              Profile
-            </router-link>
 
             <router-link
               v-if="user_role === 'admin' || user_role === 'regional_admin'"
               to="/admin/users/all"
             >
               All Users
+            </router-link>
+
+            <router-link :to="'/admin/users/profile/' + user_id">
+              Profile
+            </router-link>
+
+            <router-link :to="'/admin/users/verification/' + user_id">
+              Verification
             </router-link>
           </v-collapse-item>
 

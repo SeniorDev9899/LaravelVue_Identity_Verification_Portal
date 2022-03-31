@@ -1,18 +1,6 @@
 <template>
   <header class="site-header">
     <a href="#" class="brand-main">
-      <!-- <img
-        id="logo-desk"
-        src="/assets/img/logo-desk.png"
-        alt="Laraspace Logo"
-        class="d-none d-md-inline"
-      />
-      <img
-        id="logo-mobile"
-        src="/assets/img/logo-mobile.png"
-        alt="Laraspace Logo"
-        class="d-md-none"
-      /> -->
       <img
         id="logo-desk"
         src="/assets/img/logo.png"
@@ -92,8 +80,11 @@
             <img :src="user_picture" alt="Avatar" />
           </a>
           <v-dropdown-item>
-            <router-link class="dropdown-item" to="/admin/settings">
-              <i class="icon-fa icon-fa-cogs" /> Settings
+            <router-link
+              class="dropdown-item"
+              :to="'/admin/users/profile/' + user_id"
+            >
+              <i class="fa fa-user" aria-hidden="true"></i> Profile
             </router-link>
           </v-dropdown-item>
           <v-dropdown-item>

@@ -302,13 +302,15 @@ export default {
     validateBeforeSubmit() {
       this.loadingPage = true;
       this.$v.$touch();
-      if (!this.$v.$error) {
+      if (!this.$v.$error && this.validateCaptcha == true) {
         Auth.register(this.registerData).then((res) => {
           if (res) {
             this.loadingPage = false;
             this.$router.push("/admin/dashboard/basic");
           }
         });
+      } else if (this.validateCaptcha == false) {
+        window.toastr["error"]("Please pass reCaptcha", "Error");
       }
     },
     onCaptchaVerified(recaptchaToken) {

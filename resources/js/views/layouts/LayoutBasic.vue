@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 .side-bar-toggle {
-  position: absolute;
+  position: fixed;
   left: 205px;
   top: 50%;
   z-index: 1000;

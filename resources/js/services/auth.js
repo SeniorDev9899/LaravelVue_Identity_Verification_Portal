@@ -39,7 +39,7 @@ export default {
     }
   },
 
-  async addNewMemberregister(registerData) {
+  async addNewMemberRegister(registerData) {
     try {
       let response = await axios.post('/api/auth/new/register', registerData)
       // toastr['success']('A new ' + response.data.role + ' has been registered!', 'Success')

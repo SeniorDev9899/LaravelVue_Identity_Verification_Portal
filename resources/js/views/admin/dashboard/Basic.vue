@@ -80,69 +80,119 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-lg-12 col-xl-6 mt-2">
+      <div class="col-lg-12 col-xl-12 mt-2">
         <div class="card">
           <div class="card-header">
-            <h6>
-              <i class="icon-fa icon-fa-shopping-cart text-danger" />Recent
-              Orders
+            <h6 class="system-admins">
+              <div><img src="/assets/img/admin.png" alt="System Admin" /></div>
+              System Admins
             </h6>
           </div>
           <div class="card-body">
             <table class="table">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Actions</th>
+                  <th>Full Name</th>
+                  <th>Gender</th>
+                  <th>Verification Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Walter White</td>
-                  <td>05/12/2016</td>
-                  <td>555$</td>
-                  <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                </tr>
-                <tr>
-                  <td>Hank Hill</td>
-                  <td>05/12/2016</td>
-                  <td>222$</td>
-                  <td><a href="#" class="btn btn-default btn-xs">View</a></td>
+                <tr v-for="admin in allAdmins" :key="admin.id">
+                  <td>{{ admin.first_name }} {{ admin.last_name }}</td>
+                  <td>{{ admin.gender }}</td>
+                  <td>{{ admin.verification_result }}</td>
+                  <td>
+                    <a
+                      :href="'/admin/users/profile/' + admin.id"
+                      class="btn btn-default btn-xs"
+                      >View</a
+                    >
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-      <div class="col-lg-12 col-xl-6 mt-2">
+      <div class="col-lg-12 col-xl-12 mt-2">
         <div class="card">
           <div class="card-header">
-            <h6><i class="icon-fa icon-fa-users text-info" />New Customers</h6>
+            <h6 class="regional-admins">
+              <div>
+                <img src="/assets/img/sub_admin.png" alt="System Admin" />
+              </div>
+              Regional Admins
+            </h6>
           </div>
           <div class="card-body">
             <table class="table">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Actions</th>
+                  <th>Full Name</th>
+                  <th>Gender</th>
+                  <th>Verification Status</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Walter White</td>
-                  <td>05/12/2016</td>
-                  <td>555$</td>
-                  <td><a href="#" class="btn btn-default btn-xs">View</a></td>
+                <tr v-for="region in allRegionalAdmins" :key="region.id">
+                  <td>{{ region.first_name }} {{ region.last_name }}</td>
+                  <td>{{ region.gender }}</td>
+                  <td>{{ region.verification_result }}</td>
+                  <td>
+                    <a
+                      :href="'/admin/users/profile/' + region.id"
+                      class="btn btn-default btn-xs"
+                      >View</a
+                    >
+                  </td>
                 </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12 col-xl-12 mt-2">
+        <div class="card">
+          <div class="card-header">
+            <h6 class="practitioners">
+              <i
+                class="fa fa-user"
+                aria-hidden="true"
+                style="color: #333333"
+              ></i>
+              Practitioners
+            </h6>
+          </div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
                 <tr>
-                  <td>Hank Hill</td>
-                  <td>05/12/2016</td>
-                  <td>222$</td>
-                  <td><a href="#" class="btn btn-default btn-xs">View</a></td>
+                  <th>Full Name</th>
+                  <th>Gender</th>
+                  <th>Verification Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="practitioner in allPractitioners"
+                  :key="practitioner.id"
+                >
+                  <td>
+                    {{ practitioner.first_name }} {{ practitioner.last_name }}
+                  </td>
+                  <td>{{ practitioner.gender }}</td>
+                  <td>{{ practitioner.verification_result }}</td>
+                  <td>
+                    <a
+                      :href="'/admin/users/profile/' + practitioner.id"
+                      class="btn btn-default btn-xs"
+                      >View</a
+                    >
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -173,6 +223,9 @@ export default {
       system_admin: 0,
       regional_admin: 0,
       practitioners: 0,
+      allAdmins: [],
+      allRegionalAdmins: [],
+      allPractitioners: [],
     };
   },
   async created() {
@@ -180,16 +233,19 @@ export default {
     const response = await axios.get("/api/admin/users/get/allAdminUsers");
     let all_users = response.data;
     this.allUsers = all_users.length;
-    console.log("Response System => ", this.allUsers);
+    console.log("Response System => ", this.allUsers, all_users);
     all_users.forEach((user, index) => {
       if (user.role == "admin") {
-        this.system_admin += 1;
+        this.allAdmins.push(user);
       } else if (user.role == "regional_admin") {
-        this.regional_admin += 1;
+        this.allRegionalAdmins.push(user);
       } else if (user.role == "practitioner") {
-        this.practitioners += 1;
+        this.allPractitioners.push(user);
       }
     });
+    this.system_admin = this.allAdmins.length;
+    this.regional_admin = this.allRegionalAdmins.length;
+    this.practitioners = this.allPractitioners.length;
   },
 };
 </script>
@@ -219,5 +275,24 @@ export default {
   left: 40px;
   position: absolute;
   top: 45px;
+}
+.system-admins,
+.regional-admins,
+.practitioners {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.system-admins div,
+.regional-admins div {
+  width: 23px;
+  height: 23px;
+  margin-right: 10px;
+}
+.system-admins div img,
+.regional-admins div img {
+  max-width: 100%;
+  position: relative;
+  top: 1px;
 }
 </style>

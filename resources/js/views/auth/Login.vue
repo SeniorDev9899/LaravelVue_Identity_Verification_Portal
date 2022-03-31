@@ -120,7 +120,7 @@ export default {
     validateBeforeSubmit() {
       this.$v.$touch();
 
-      if (!this.$v.$error) {
+      if (!this.$v.$error && this.validateCaptcha == true) {
         Auth.login(this.loginData).then((res) => {
           if (res) {
             if (Ls.get("Role") == "admin" || Ls.get("Role") == "sub_admin") {
@@ -131,6 +131,8 @@ export default {
             }
           }
         });
+      } else if (this.validateCaptcha == false) {
+        window.toastr["error"]("Please pass reCaptcha", "Error");
       }
     },
     onCaptchaVerified(recaptchaToken) {

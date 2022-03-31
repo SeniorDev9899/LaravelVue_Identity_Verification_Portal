@@ -7,30 +7,8 @@
         : 'main-content'
     "
   >
-    <!-- :class="user_role == 'practitioner' ? 'role_practitioner' : 'main-content'" -->
     <div class="page-header">
-      <h3 class="page-title">User Profile</h3>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Users</a></li>
-        <li class="breadcrumb-item active">
-          {{ user_first_name }} {{ user_last_name }}
-        </li>
-      </ol>
-    </div>
-    <div
-      v-if="current_user_verification_status == 'nonactivated'"
-      class="row member-verification"
-    >
-      <button
-        class="btn btn-warning btn-rounded"
-        @click="startMemberVerification"
-      >
-        <div class="verification-icon">
-          <i class="fa-solid fa-user-check"></i>
-        </div>
-        <span>Start Verification</span>
-      </button>
+      <h3 class="page-title">Verification Portal</h3>
     </div>
     <div class="row">
       <div class="col-sm-12">
@@ -45,42 +23,10 @@
                       alt="Admin Avatar"
                       class="img-fluid"
                     />
-                    <form
-                      @submit="changeUserAvatar"
-                      enctype="multipart/form-data"
-                    >
-                      <input
-                        id="user-avatar"
-                        type="file"
-                        accept="image/png, image/gif, image/jpeg"
-                        class="form-control"
-                        v-on:change="onChange"
-                        style="display: none"
-                      />
-                      <button
-                        type="submit"
-                        class="btn btn-primary btn-block"
-                        style="display: none"
-                      ></button>
-                      <button
-                        @click="changeAvatarOccurr"
-                        v-tooltip="{
-                          content: tooltipText,
-                          placement: position + '-center',
-                          delay: {
-                            show: 200,
-                            hide: 300,
-                          },
-                          classes: ['info'],
-                        }"
-                        class="user-avatar-change"
-                      ></button>
-                    </form>
                   </div>
-                  <div class="personal-info"></div>
                 </div>
                 <div class="col-sm-10">
-                  <h2>Edit Profile</h2>
+                  <h2>Verification Information</h2>
                   <div class="edit-personal-profile">
                     <b-form @submit.stop.prevent="onSubmit">
                       <div class="user-name-edit">
@@ -156,7 +102,7 @@
                         </b-form-group>
                       </div>
 
-                      <div class="user-gender-role-edit">
+                      <!-- <div class="user-gender-role-edit">
                         <b-form-group
                           id="gender-input-group"
                           label="Gender"
@@ -209,7 +155,7 @@
                             }}</b-form-invalid-feedback
                           >
                         </b-form-group>
-                      </div>
+                      </div> -->
 
                       <div class="id-serial-edit">
                         <b-form-group
@@ -235,7 +181,7 @@
                           >
                         </b-form-group>
 
-                        <b-form-group
+                        <!-- <b-form-group
                           id="serial-input-group"
                           label="Serial Number"
                           label-for="serial-input"
@@ -256,7 +202,7 @@
                               veeErrors.first("serial-input")
                             }}</b-form-invalid-feedback
                           >
-                        </b-form-group>
+                        </b-form-group> -->
                       </div>
 
                       <div class="company-region-edit">
@@ -307,7 +253,7 @@
                         </b-form-group>
                       </div>
 
-                      <div class="verification-health-edit">
+                      <!-- <div class="verification-health-edit">
                         <b-form-group
                           id="health-input-group"
                           label="Health Status"
@@ -331,92 +277,11 @@
                             }}</b-form-invalid-feedback
                           >
                         </b-form-group>
-                      </div>
+                      </div> -->
 
                       <div class="submit-reset">
                         <b-button class="user-info-submit" type="submit"
-                          >Save</b-button
-                        >
-                      </div>
-                    </b-form>
-                  </div>
-                  <h2 style="margin-top: 40px">Update Password</h2>
-                  <div class="edit-personal-password">
-                    <b-form @submit.stop.prevent="changePassword">
-                      <b-form-group
-                        id="current-password-input-group"
-                        label="Current Password"
-                        label-for="current-password-input"
-                      >
-                        <b-form-input
-                          id="current-password-input"
-                          name="current-password-input"
-                          v-model="user_current_password"
-                          v-validate="{ required: true }"
-                          :state="validateState('current-password-input')"
-                          aria-describedby="current-password-input-live-feedback"
-                          data-vv-as="Current Password"
-                          type="password"
-                        ></b-form-input>
-
-                        <b-form-invalid-feedback
-                          id="current-password-input-live-feedback"
-                          >{{
-                            veeErrors.first("current-password-input")
-                          }}</b-form-invalid-feedback
-                        >
-                      </b-form-group>
-
-                      <b-form-group
-                        id="new-password-input-group"
-                        label="New Password"
-                        label-for="new-password-input"
-                      >
-                        <b-form-input
-                          id="new-password-input"
-                          name="new-password-input"
-                          v-model="user_new_password"
-                          v-validate="{ required: true, min: 6 }"
-                          :state="validateState('new-password-input')"
-                          aria-describedby="new-password-input-live-feedback"
-                          data-vv-as="New Password"
-                          type="password"
-                        ></b-form-input>
-
-                        <b-form-invalid-feedback
-                          id="new-password-input-live-feedback"
-                          >{{
-                            veeErrors.first("new-password-input")
-                          }}</b-form-invalid-feedback
-                        >
-                      </b-form-group>
-
-                      <b-form-group
-                        id="confirm-password-input-group"
-                        label="Confirm Password"
-                        label-for="confirm-password-input"
-                      >
-                        <b-form-input
-                          id="confirm-password-input"
-                          name="confirm-password-input"
-                          v-model="user_confirm_password"
-                          v-validate="{ required: true }"
-                          :state="validateState('confirm-password-input')"
-                          aria-describedby="confirm-password-input-live-feedback"
-                          data-vv-as="confirm-password"
-                          type="password"
-                        ></b-form-input>
-
-                        <b-form-invalid-feedback
-                          id="confirm-password-input-live-feedback"
-                          >{{
-                            veeErrors.first("confirm-password-input")
-                          }}</b-form-invalid-feedback
-                        >
-                      </b-form-group>
-                      <div class="submit-user-password-change">
-                        <b-button class="user-info-submit" type="submit"
-                          >Save</b-button
+                          >Verify</b-button
                         >
                       </div>
                     </b-form>
@@ -449,6 +314,7 @@ export default {
       user_region: "",
       user_picture: "/assets/img/default-user-avatar.jpg",
       user_health_status: "",
+      user_verification_result: "",
       user_validity_period: "",
       img: "",
       tooltipText: "Change your avatar",
@@ -472,115 +338,41 @@ export default {
         { value: "normal", text: "Normal" },
         { value: "good", text: "Good" },
       ],
-      user_current_password: "......",
-      user_new_password: "......",
-      user_confirm_password: "......",
-      current_user_role: "",
-      current_user_verification_status: "",
     };
   },
   components: {
     tabs: Tabs,
     tab: Tab,
   },
-  watch: {
-    "$route.params.id": function (id) {
-      this.fetchUserInfo(id);
-    },
-  },
-  created() {
+  async created() {
     this.user_id = this.$route.params.id;
     this.current_user_role = Ls.get("Role");
     this.user_picture = "/assets/img/default-user-avatar.jpg";
-    this.fetchUserInfo(this.user_id);
+    try {
+      const response = await axios.get(`/api/admin/user/get/${this.user_id}`);
+      this.user_first_name = response.data.user_info[0].first_name;
+      this.user_last_name = response.data.user_info[0].last_name;
+      this.user_email = response.data.user_info[0].email;
+      this.user_gender = response.data.user_info[0].gender;
+      this.user_role = response.data.user_info[0].role;
+      this.user_id_number = response.data.user_info[0].id_number;
+      this.user_serial_number = response.data.user_info[0].serial_number;
+      this.user_company = response.data.user_info[0].company;
+      this.user_region = response.data.user_info[0].region;
+      if (response.data.user_avatar.length !== 0) {
+        this.user_picture = response.data.user_avatar;
+      }
+      this.user_health_status = response.data.user_info[0].health_status;
+      this.user_verification_result =
+        response.data.user_info[0].verification_result;
+      this.user_validity_period = response.data.user_info[0].validity_period;
+    } catch (error) {
+      if (error) {
+        window.toastr["error"]("There was an error", "Error");
+      }
+    }
   },
   methods: {
-    onChange(e) {
-      this.img = e.target.files[0];
-      if (this.img !== "") {
-        this.changeUserAvatar(e);
-      }
-    },
-    async fetchUserInfo(id) {
-      try {
-        const response = await axios.get(`/api/admin/user/get/${id}`);
-        this.user_first_name = response.data.user_info[0].first_name;
-        this.user_last_name = response.data.user_info[0].last_name;
-        this.user_email = response.data.user_info[0].email;
-        this.user_gender = response.data.user_info[0].gender;
-        this.user_role = response.data.user_info[0].role;
-        this.user_id_number = response.data.user_info[0].id_number;
-        this.user_serial_number = response.data.user_info[0].serial_number;
-        this.user_company = response.data.user_info[0].company;
-        this.user_region = response.data.user_info[0].region;
-        if (response.data.user_avatar.length !== 0) {
-          this.user_picture = response.data.user_avatar;
-        }
-        this.user_health_status = response.data.user_info[0].health_status;
-        if (id == Ls.get("user_id")) {
-          this.current_user_verification_status =
-            response.data.user_info[0].verification_result;
-          if (this.current_user_verification_status == "nonactivated") {
-            window.toastr["info"]("Your Identity has not been verified...");
-          } else if (this.current_user_verification_status == "processing") {
-            window.toastr["info"](
-              "Your Identity is on the processing of verification now..."
-            );
-          } else if (this.current_user_verification_status == "activated") {
-            window.toastr["info"]("Your Identity has already been verified...");
-          }
-        }
-        this.user_validity_period = response.data.user_info[0].validity_period;
-      } catch (error) {
-        if (error) {
-          window.toastr["error"]("There was an error", "Error");
-        }
-      }
-    },
-    changeUserAvatar(e) {
-      let exist = this;
-      e.preventDefault();
-      const config = {
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      };
-      let formData = new FormData();
-      formData.append("user_img", this.img);
-      formData.append("user_id", this.user_id);
-      if (formData.getAll("user_img")[0] !== "") {
-        for (const value of formData.values()) {
-        }
-        axios
-          .post("/api/admin/user/changeUserAvatar", formData, config)
-          .then(function (res) {
-            if (Array.isArray(res.data) && res.data.length !== 0) {
-              Ls.set("user_avatar", res.data[0].path);
-              exist.setUserAvatar(res.data[0].path);
-            } else {
-              Ls.set("user_avatar", res.data.path);
-              exist.setUserAvatar(res.data.path);
-            }
-            window.toastr["success"](
-              "The user avatar has been changed!",
-              "Success"
-            );
-          });
-      }
-      this.img = "";
-    },
-    changeAvatarOccurr() {
-      document.getElementById("user-avatar").click();
-    },
-    setUserAvatar(path) {
-      this.user_picture = path;
-      if (
-        this.current_user_role == "practitioner" ||
-        this.user_id == Ls.get("user_id")
-      ) {
-        this.$emit("userAvatarChange", this.user_picture);
-      }
-    },
     validateState(ref) {
       if (
         this.veeFields[ref] &&
@@ -601,6 +393,7 @@ export default {
       this.user_company = "...";
       this.user_region = "...";
       this.user_health_status = "normal";
+      this.user_verification_result = "nonactivated";
 
       this.$nextTick(() => {
         this.$validator.reset();
@@ -639,42 +432,6 @@ export default {
             );
           });
       });
-    },
-    changePassword() {
-      this.$validator.validateAll().then((result) => {
-        if (!result) {
-          return;
-        }
-        let formData = {
-          current_password: this.user_current_password,
-          new_password: this.user_new_password,
-          confirm_password: this.user_confirm_password,
-        };
-
-        axios
-          .post(`/api/admin/user/updatePassword/${this.user_id}`, formData)
-          .then(function (res) {
-            if (res.data == 1) {
-              window.toastr["success"](
-                "Your password has been changed successfully!",
-                "Success"
-              );
-            } else if (res.data == 3) {
-              window.toastr["error"](
-                "Your current password is not correct",
-                "Error"
-              );
-            } else if (res.data == 2) {
-              window.toastr["error"](
-                "Please confirm new password again",
-                "Error"
-              );
-            }
-          });
-      });
-    },
-    startMemberVerification() {
-      this.$router.push("/admin/users/verification/" + this.user_id);
     },
   },
 };
@@ -720,18 +477,20 @@ export default {
 .user-name-edit #last-name-input-group,
 .user-gender-role-edit #gender-input-group,
 .user-gender-role-edit #role-input-group,
-.id-serial-edit #id-input-group,
 .id-serial-edit #serial-input-group,
 .company-region-edit #region-input-group,
 .company-region-edit #company-input-group {
   width: 48%;
 }
+.id-serial-edit #id-input-group {
+  width: 100%;
+}
 .submit-reset {
   display: flex;
   align-items: center;
-  justify-content: left;
+  justify-content: right;
   flex-direction: row;
-  margin-top: 30px;
+  margin-top: 15px;
 }
 .user-info-submit {
   margin-right: 20px;
@@ -744,42 +503,17 @@ export default {
   border-color: #007bff;
   color: white;
 }
-.edit-personal-profile,
-.edit-personal-password {
+.edit-personal-profile {
   background-color: rgb(240 246 247);
   padding: 10px;
+}
+.edit-personal-profile {
+  margin-top: 30px;
 }
 .visibility_hidden {
   visibility: hidden;
 }
 .visibility_show {
   visibility: visible;
-}
-.member-verification {
-  justify-content: flex-end;
-  padding-bottom: 20px;
-  padding-right: 20px;
-}
-.member-verification button {
-  background-color: #ffde00 !important;
-  border-color: #ffde00 !important;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0px !important;
-}
-.member-verification button span {
-  padding: 5px 15px 5px 10px;
-}
-.verification-icon {
-  padding-left: 15px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-right: 1px solid;
-}
-.personal-info {
-  margin-top: 30px;
-  padding: 0px 5px;
 }
 </style>

@@ -481,7 +481,7 @@ export default {
       member_gender: "",
       verificationResults: [
         { value: "", text: "Select Verification Result" },
-        { value: "not activated", text: "Not Activated" },
+        { value: "nonactivated", text: "Not Activated" },
         { value: "processing", text: "Processing" },
         { value: "activated", text: "Activated" },
       ],
@@ -613,55 +613,54 @@ export default {
             }
           }
         }
-        let filteringData = [];
-        if (exist.member_gender === "") {
-          filteringData = return_data;
-        } else {
-          return_data.forEach((item, index) => {
+        let filteringData = return_data;
+        if (exist.member_gender !== "") {
+          let genderedData = [];
+          filteringData.forEach((item, index) => {
             if (item["gender"] == exist.member_gender) {
-              filteringData.push(item);
+              genderedData.push(item);
             }
           });
+          filteringData = genderedData;
         }
-        // if (exist.member_verification_result === "") {
-        //   filteringData = return_data;
-        // } else {
-        //   return_data.forEach((item, index) => {
-        //     if (
-        //       item["verification_result"] == exist.member_verification_result
-        //     ) {
-        //       filteringData.push(item);
-        //     }
-        //   });
-        // }
-        // if (exist.member_health_status === "") {
-        //   filteringData = return_data;
-        // } else {
-        //   return_data.forEach((item, index) => {
-        //     if (item["health_status"] == exist.member_health_status) {
-        //       filteringData.push(item);
-        //     }
-        //   });
-        // }
-        // if (exist.member_company === "") {
-        //   filteringData = return_data;
-        // } else {
-        //   return_data.forEach((item, index) => {
-        //     if (item["company"] == exist.member_company) {
-        //       filteringData.push(item);
-        //     }
-        //   });
-        // }
-        // if (exist.member_region === "") {
-        //   filteringData = return_data;
-        // } else {
-        //   return_data.forEach((item, index) => {
-        //     if (item["region"] == exist.member_region) {
-        //       filteringData.push(item);
-        //     }
-        //   });
-        // }
-        // console.log("Filtering Data => ", filteringData);
+        if (exist.member_verification_result !== "") {
+          let verifiedData = [];
+          filteringData.forEach((item, index) => {
+            if (
+              item["verification_result"] == exist.member_verification_result
+            ) {
+              verifiedData.push(item);
+            }
+          });
+          filteringData = verifiedData;
+        }
+        if (exist.member_health_status !== "") {
+          let healthedData = [];
+          filteringData.forEach((item, index) => {
+            if (item["health_status"] == exist.member_health_status) {
+              healthedData.push(item);
+            }
+          });
+          filteringData = healthedData;
+        }
+        if (exist.member_company !== "") {
+          let companiedData = [];
+          filteringData.forEach((item, index) => {
+            if (item["company"] == exist.member_company) {
+              companiedData.push(item);
+            }
+          });
+          filteringData = companiedData;
+        }
+        if (exist.member_region !== "") {
+          let regionalData = [];
+          filteringData.forEach((item, index) => {
+            if (item["region"] == exist.member_region) {
+              regionalData.push(item);
+            }
+          });
+          filteringData = regionalData;
+        }
         return {
           data: filteringData,
           pagination: {
@@ -724,8 +723,7 @@ export default {
     addNewMember() {
       this.$v.$touch();
       if (!this.$v.$error) {
-        this.$forceUpdate();
-        Auth.addNewMemberregister(this.addMemberData).then((res) => {
+        Auth.addNewMemberRegister(this.addMemberData).then((res) => {
           if (res) {
             this.$refs.success_modal.open();
             this.show = false;

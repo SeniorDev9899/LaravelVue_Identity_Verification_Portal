@@ -68,6 +68,7 @@ import MailboxApp from './views/admin/apps/mailbox/MailboxApp.vue'
 // Users
 import Users from './views/admin/users/Users.vue'
 import Profile from './views/admin/users/Profile.vue'
+import Verification from './views/admin/users/Verification.vue'
 
 // Settings
 import Settings from './views/admin/Settings.vue'
@@ -323,12 +324,16 @@ const routes = [
 
       // Users
       {
+        path: 'users/all',
+        component: Users
+      },
+      {
         path: 'users/profile/:id',
         component: Profile
       },
       {
-        path: 'users/all',
-        component: Users
+        path: 'users/verification/:id',
+        component: Verification
       },
 
       // Apps
