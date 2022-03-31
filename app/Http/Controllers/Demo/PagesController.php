@@ -90,6 +90,7 @@ class PagesController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        Avatars::where('user_id', $id)->delete();
         $user->delete();
         return $users = User::all();
     }

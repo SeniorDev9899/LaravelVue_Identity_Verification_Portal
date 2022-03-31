@@ -691,6 +691,7 @@ export default {
       try {
         let response = await window.axios.delete("/api/admin/users/" + id);
         this.users = response.data;
+        this.$refs.table.refresh();
         window.toastr["success"]("User Deleted", "Success");
       } catch (error) {
         if (error) {
