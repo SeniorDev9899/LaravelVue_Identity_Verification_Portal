@@ -53,6 +53,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'api.auth'], function (){
             'as' => 'admin.users', 'uses' => 'Demo\PagesController@allUsers'
         ]);
 
+        Route::get('/get/allAdminUsers', [
+            'as' => 'admin.users.all', 'uses' => 'Demo\PagesController@allAdminUsers' 
+        ]);
+
         Route::delete('/{id}',[
             'as' => 'admin.users.delete', 'uses' => 'Demo\PagesController@destroy'
         ]);

@@ -249,7 +249,7 @@ export default {
         password_confirmation: "",
         gender: "male",
         recaptcha: "",
-        terms: false,
+        terms: true,
       },
       loadingPage: true,
       validateCaptcha: false,

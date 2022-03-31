@@ -318,6 +318,43 @@
             <div class="card-actions" />
           </div>
           <div class="card-body">
+            <div class="query-group">
+              <b-form-select
+                id="gender-input"
+                name="gender-input"
+                v-model="member_gender"
+                :options="memberGenders"
+                @change="changeMemberProperty"
+              ></b-form-select>
+              <b-form-select
+                id="verification-result-input"
+                name="verification-result-input"
+                v-model="member_verification_result"
+                :options="verificationResults"
+                @change="changeMemberProperty"
+              ></b-form-select>
+              <b-form-select
+                id="health-status-input"
+                name="health-status-input"
+                v-model="member_health_status"
+                :options="healthStatues"
+                @change="changeMemberProperty"
+              ></b-form-select>
+              <b-form-select
+                id="company-input"
+                name="company-input"
+                v-model="member_company"
+                :options="companies"
+                @change="changeMemberProperty"
+              ></b-form-select>
+              <b-form-select
+                id="region-input"
+                name="region-input"
+                v-model="member_region"
+                :options="regions"
+                @change="changeMemberProperty"
+              ></b-form-select>
+            </div>
             <table-component
               :data="getUsers"
               sort-by="full_name"
@@ -404,6 +441,7 @@ export default {
   },
   data() {
     return {
+      page_number: "",
       users: [],
       user_role: "",
       user_id: "",
@@ -434,6 +472,40 @@ export default {
         "company",
         "region",
         "health_status",
+      ],
+      memberGenders: [
+        { value: "", text: "Select Gender" },
+        { value: "male", text: "Male" },
+        { value: "female", text: "Female" },
+      ],
+      member_gender: "",
+      verificationResults: [
+        { value: "", text: "Select Verification Result" },
+        { value: "not activated", text: "Not Activated" },
+        { value: "processing", text: "Processing" },
+        { value: "activated", text: "Activated" },
+      ],
+      member_verification_result: "",
+      healthStatues: [
+        { value: "", text: "Select Health Status" },
+        { value: "good", text: "Good" },
+        { value: "normal", text: "Normal" },
+        { value: "bad", text: "Bad" },
+      ],
+      member_health_status: "",
+      member_company: "",
+      member_region: "",
+      companies: [
+        { value: "", text: "Select Company" },
+        { value: "...", text: "..." },
+        { value: "...", text: "..." },
+        { value: "...", text: "..." },
+      ],
+      regions: [
+        { value: "", text: "Select Region" },
+        { value: "...", text: "..." },
+        { value: "...", text: "..." },
+        { value: "...", text: "..." },
       ],
     };
   },
@@ -486,6 +558,7 @@ export default {
   },
   methods: {
     async getUsers({ page, filter, sort }) {
+      this.page_number = page;
       try {
         const response = await axios.get(`/api/admin/users/get?page=${page}`);
         const avatarResponse = await axios.get("/api/admin/user/avatar/getAll");
@@ -540,8 +613,57 @@ export default {
             }
           }
         }
+        let filteringData = [];
+        if (exist.member_gender === "") {
+          filteringData = return_data;
+        } else {
+          return_data.forEach((item, index) => {
+            if (item["gender"] == exist.member_gender) {
+              filteringData.push(item);
+            }
+          });
+        }
+        // if (exist.member_verification_result === "") {
+        //   filteringData = return_data;
+        // } else {
+        //   return_data.forEach((item, index) => {
+        //     if (
+        //       item["verification_result"] == exist.member_verification_result
+        //     ) {
+        //       filteringData.push(item);
+        //     }
+        //   });
+        // }
+        // if (exist.member_health_status === "") {
+        //   filteringData = return_data;
+        // } else {
+        //   return_data.forEach((item, index) => {
+        //     if (item["health_status"] == exist.member_health_status) {
+        //       filteringData.push(item);
+        //     }
+        //   });
+        // }
+        // if (exist.member_company === "") {
+        //   filteringData = return_data;
+        // } else {
+        //   return_data.forEach((item, index) => {
+        //     if (item["company"] == exist.member_company) {
+        //       filteringData.push(item);
+        //     }
+        //   });
+        // }
+        // if (exist.member_region === "") {
+        //   filteringData = return_data;
+        // } else {
+        //   return_data.forEach((item, index) => {
+        //     if (item["region"] == exist.member_region) {
+        //       filteringData.push(item);
+        //     }
+        //   });
+        // }
+        // console.log("Filtering Data => ", filteringData);
         return {
-          data: return_data,
+          data: filteringData,
           pagination: {
             totalPages: response.data.last_page,
             currentPage: page,
@@ -645,6 +767,9 @@ export default {
         return result * sortOrder;
       };
     },
+    changeMemberProperty(e) {
+      this.$refs.table.refresh();
+    },
   },
 };
 </script>
@@ -732,5 +857,16 @@ export default {
 }
 .member-submit-margin {
   margin-top: 20px;
+}
+.query-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 15px 0px;
+}
+.query-group select {
+  width: 18%;
+  margin: 0px 5px;
 }
 </style>
